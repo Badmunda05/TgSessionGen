@@ -87,13 +87,16 @@ func main() {
 
 	// ── Send Session to Saved Messages ───────────────────────
 	message := fmt.Sprintf(
-		"✅ YOUR STRING SESSION (GoGram)\n\n`%s`\n\n⚠️ KEEP YOUR SESSION STRING SECRET!",
+		"✅ YOUR STRING SESSION (GoGram)\n\n<code>%s</code>\n\n⚠️ KEEP YOUR SESSION STRING SECRET!",
 		session,
 	)
 
 	_, err = client.SendMessage(
 		"me",
 		message,
+		&telegram.SendOptions{
+			ParseMode: "html",
+		},
 	)
 
 	if err != nil {
