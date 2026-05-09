@@ -63,7 +63,7 @@ def get_api_hash() -> str:
 
 
 async def generate_session():
-    from pyrogram import Client
+    from pyrogram import Client, enums
     from pyrogram.errors import (
         ApiIdInvalid,
         PhoneNumberInvalid,
@@ -189,7 +189,7 @@ async def generate_session():
         await client.send_message(
             chat_id="me",
             text=message_text,
-            parse_mode="markdown"
+            parse_mode=enums.ParseMode.MARKDOWN
         )
 
         print("📨 Session sent to Saved Messages.")
