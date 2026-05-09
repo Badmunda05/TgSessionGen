@@ -16,85 +16,131 @@ func main() {
 
 	printBanner()
 
+	// ── App ID ───────────────────────────────────────────────
 	fmt.Print("Enter your App ID (from my.telegram.org): ")
+
 	appIDStr, _ := reader.ReadString('\n')
 	appIDStr = strings.TrimSpace(appIDStr)
 
 	appID64, err := strconv.ParseInt(appIDStr, 10, 32)
+
 	if err != nil || appID64 <= 0 {
-		log.Fatal("❌  Invalid App ID. Must be a positive integer (e.g. 12345678).")
+		log.Fatal("❌ Invalid App ID. Must be a positive integer.")
 	}
+
 	appID := int32(appID64)
 
+	// ── App Hash ─────────────────────────────────────────────
 	fmt.Print("Enter your App Hash (from my.telegram.org): ")
+
 	appHash, _ := reader.ReadString('\n')
 	appHash = strings.TrimSpace(appHash)
+
 	if len(appHash) < 10 {
-		log.Fatal("❌  App Hash looks invalid. Should be a 32-character hex string.")
+		log.Fatal("❌ Invalid App Hash.")
 	}
 
 	fmt.Println()
-	fmt.Println("🔗  Connecting to Telegram …")
+	fmt.Println("🔗 Connecting to Telegram...")
 
-	client, err := telegram.NewClient(telegram.ClientConfig{
-		AppID:         appID,
-		AppHash:       appHash,
-		MemorySession: true,
-		LogLevel:      telegram.LogError,
-	})
+	// ── Create Client ────────────────────────────────────────
+	client, err := telegram.NewClient(
+		telegram.ClientConfig{
+			AppID:         appID,
+			AppHash:       appHash,
+			MemorySession: true,
+			LogLevel:      telegram.LogError,
+		},
+	)
+
 	if err != nil {
-		log.Fatalf("❌  Failed to create client: %v", err)
+		log.Fatalf("❌ Failed to create client: %v", err)
 	}
 
 	_, err = client.Conn()
+
 	if err != nil {
-		log.Fatalf("❌  Failed to connect: %v", err)
+		log.Fatalf("❌ Failed to connect: %v", err)
 	}
-	fmt.Println("✅  Connected!")
+
+	fmt.Println("✅ Connected!")
 	fmt.Println()
 
+	// ── Login ────────────────────────────────────────────────
 	err = client.AuthPrompt()
+
 	if err != nil {
-		log.Fatalf("❌  Login failed: %v", err)
+		log.Fatalf("❌ Login failed: %v", err)
 	}
 
+	// ── Export Session ───────────────────────────────────────
 	session := client.ExportSession()
 
 	fmt.Println()
 	fmt.Println("╔══════════════════════════════════════════╗")
-	fmt.Println("║       ✅  YOUR STRING SESSION  ✅        ║")
+	fmt.Println("║       ✅ YOUR STRING SESSION ✅         ║")
 	fmt.Println("╚══════════════════════════════════════════╝")
 	fmt.Println()
+
 	fmt.Println(session)
 	fmt.Println()
 
-	const outFile = "session_string.txt"
-	if werr := os.WriteFile(outFile, []byte(session+"\n"), 0600); werr != nil {
-		fmt.Printf("⚠️   Could not save session to file: %v\n", werr)
+	// ── Send Session to Saved Messages ───────────────────────
+	message := fmt.Sprintf(
+		"✅ YOUR STRING SESSION (GoGram)\n\n`%s`\n\n⚠️ KEEP YOUR SESSION STRING SECRET!",
+		session,
+	)
+
+	_, err = client.SendMessage(
+		"me",
+		message,
+	)
+
+	if err != nil {
+		fmt.Printf("⚠️ Could not send session to Saved Messages: %v\n", err)
 	} else {
-		fmt.Printf("💾  Session saved to: %s\n", outFile)
+		fmt.Println("📨 Session sent to Saved Messages.")
 	}
 
+	// ── Account Info ─────────────────────────────────────────
 	me, err := client.GetMe()
+
 	if err != nil {
-		fmt.Printf("⚠️   Could not fetch account info: %v\n", err)
+		fmt.Printf("⚠️ Could not fetch account info: %v\n", err)
 		return
 	}
 
 	fmt.Println()
-	fmt.Println("👤  Logged in as:")
-	fmt.Println(client.JSON(me, true))
+	fmt.Println("👤 Logged in as:")
+
+	fullName := strings.TrimSpace(
+		me.FirstName + " " + me.LastName,
+	)
+
+	fmt.Printf("    Name    : %s\n", fullName)
+
+	if me.Username != "" {
+		fmt.Printf("    Username: @%s\n", me.Username)
+	}
+
+	fmt.Printf("    User ID : %d\n", me.ID)
+
+	if me.Phone != "" {
+		fmt.Printf("    Phone   : +%s\n", me.Phone)
+	}
+
 	fmt.Println()
-	fmt.Println("⚠️   KEEP YOUR SESSION STRING SECRET — it gives full access to your account!")
+	fmt.Println("⚠️ KEEP YOUR SESSION STRING SECRET.")
+	fmt.Println("It gives full access to your Telegram account!")
 }
 
 func printBanner() {
 	fmt.Println("╔══════════════════════════════════════════╗")
-	fmt.Println("║  Telegram String Session Generator       ║")
-	fmt.Println("║  Powered by GoGram                       ║")
-	fmt.Println("║  github.com/amarnathcjd/gogram           ║")
+	fmt.Println("║  Telegram String Session Generator      ║")
+	fmt.Println("║  Powered by GoGram                      ║")
 	fmt.Println("╚══════════════════════════════════════════╝")
 	fmt.Println()
-	fmt.Println("Get your API credentials at: https://my.telegram.org/apps")
+	fmt.Println("Get your API credentials at:")
+	fmt.Println("https://my.telegram.org/apps")
 	fmt.Println()
 }
