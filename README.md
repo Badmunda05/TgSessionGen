@@ -25,7 +25,7 @@ on a VPS without needing OTP every time.
 ## Clone the Repo
 
 ```bash
-git clone https://github.com/Badmunda05/GoSessionTg
+git clone https://github.com/Badmunda05/TgSessionGen
 ```
 
 ---
@@ -35,7 +35,7 @@ git clone https://github.com/Badmunda05/GoSessionTg
 ### Install & Run
 
 ```bash
-cd ~/GoSessionTg/pyrogram-session
+cd ~/TgSessionGen/pyrogram-session
 pip3 install -r requirements.txt
 python3 session_gen.py
 ```
@@ -66,7 +66,7 @@ BQHBfTsAxx_NOTREAL_xxxxxxxxxxxxxxxxxxxxxxxxxxxx...
 ### Install & Run
 
 ```bash
-cd ~/GoSessionTg/telethon-session
+cd ~/TgSessionGen/telethon-session
 pip3 install -r requirements.txt
 python3 session_gen.py
 ```
@@ -95,7 +95,7 @@ source ~/.bashrc
 ### Install & Run
 
 ```bash
-cd ~/GoSessionTg/go-session
+cd ~/TgSessionGen/go-session
 go mod tidy
 go run main.go
 ```
@@ -103,7 +103,7 @@ go run main.go
 ### Build standalone binary (no Go needed after this)
 
 ```bash
-cd ~/GoSessionTg/go-session
+cd ~/TgSessionGen/go-session
 go build -o session-gen main.go
 ./session-gen
 ```
@@ -116,8 +116,8 @@ go build -o session-gen main.go
 
 ```bash
 sudo apt update && sudo apt install -y python3 python3-pip git
-git clone https://github.com/Badmunda05/GoSessionTg
-cd ~/GoSessionTg/pyrogram-session
+git clone https://github.com/Badmunda05/TgSessionGen
+cd ~/TgSessionGen/pyrogram-session
 pip3 install -r requirements.txt
 python3 session_gen.py
 ```
@@ -126,8 +126,8 @@ python3 session_gen.py
 
 ```bash
 sudo apt update && sudo apt install -y python3 python3-pip git
-git clone https://github.com/Badmunda05/GoSessionTg
-cd ~/GoSessionTg/telethon-session
+git clone https://github.com/Badmunda05/TgSessionGen
+cd ~/TgSessionGen/telethon-session
 pip3 install -r requirements.txt
 python3 session_gen.py
 ```
@@ -136,8 +136,8 @@ python3 session_gen.py
 
 ```bash
 sudo apt update && sudo apt install -y golang-go git
-git clone https://github.com/Badmunda05/GoSessionTg
-cd ~/GoSessionTg/go-session
+git clone https://github.com/Badmunda05/TgSessionGen
+cd ~/TgSessionGen/go-session
 go mod tidy
 go run main.go
 ```
@@ -216,7 +216,7 @@ func main() {
 ## Project Structure
 
 ```
-GoSessionTg/
+TgSessionGen/
 ├── go-session/
 │   ├── main.go                 ← Go session generator (GoGram)
 │   └── go.mod                  ← Go module file
