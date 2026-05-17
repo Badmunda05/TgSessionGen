@@ -1,5 +1,5 @@
 module tg-session-gen
 
-go 1.21
+go 1.26
 
-require github.com/amarnathcjd/gogram v1.4.3
+require github.com/amarnathcjd/gogram v1.7.3
